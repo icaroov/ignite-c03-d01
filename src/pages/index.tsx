@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import { GetStaticProps } from 'next';
+import Prismic from '@prismicio/client';
 
 import { getPrismicClient } from '../services/prismic';
 
@@ -24,13 +26,45 @@ interface HomeProps {
   postsPagination: PostPagination;
 }
 
-// export default function Home() {
-//   // TODO
-// }
+export default function Home({ postsPagination }: HomeProps): JSX.Element {
+  const [posts, setPosts] = useState(postsPagination.results);
 
-// export const getStaticProps = async () => {
-//   // const prismic = getPrismicClient();
-//   // const postsResponse = await prismic.query(TODO);
+  return (
+    <p>
+      {posts.map(post => (
+        <h1>{post.data.title}</h1>
+      ))}
+    </p>
+  );
+}
 
-//   // TODO
-// };
+export const getStaticProps: GetStaticProps = async () => {
+  const prismic = getPrismicClient();
+
+  const postsResponse = await prismic.query(
+    [Prismic.predicates.at('document.type', 'posts')],
+    {
+      fetch: ['posts.title', 'posts.subtitle', 'posts.author'],
+      orderings: '[document.first_publication_date desc]',
+    }
+  );
+
+  const results = postsResponse.results.map((post: Post) => ({
+    slug: post.uid,
+    first_publication_date: post.first_publication_date,
+    data: {
+      title: post.data.title,
+      subtitle: post.data.subtitle,
+      author: post.data.author,
+    },
+  }));
+
+  return {
+    props: {
+      postsPagination: {
+        next_page: postsResponse.next_page,
+        results,
+      },
+    },
+  };
+};
