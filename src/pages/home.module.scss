@@ -1,1 +1,45 @@
-// TODO
+.post {
+  li {
+    list-style-type: none;
+
+    &:not(:last-child) {
+      margin-bottom: 50px;
+    }
+
+    h1 {
+      line-height: 2rem;
+      letter-spacing: -0.5px;
+
+      margin-bottom: 8px;
+    }
+
+    h4 {
+      color: var(--body);
+      font-weight: 400;
+      font-size: 18px;
+      line-height: 22px;
+
+      margin-bottom: 25px;
+    }
+  }
+}
+
+.info {
+  color: var(--info);
+  line-height: 17px;
+  font-size: 14px;
+
+  time {
+    margin-right: 28px;
+
+    svg {
+      margin-right: 5px;
+    }
+  }
+
+  span {
+    svg {
+      margin-right: 5px;
+    }
+  }
+}

@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { GetStaticProps } from 'next';
 import Prismic from '@prismicio/client';
+import { FiCalendar as CalendarIcon, FiUser as UserIcon } from 'react-icons/fi';
+import { format } from 'date-fns';
+import ptBR from 'date-fns/locale/pt-BR';
 
 import { getPrismicClient } from '../services/prismic';
 
@@ -34,13 +37,27 @@ export default function Home({ postsPagination }: HomeProps): JSX.Element {
   return (
     <div className={commonStyles.container}>
       <Logo />
-      {posts.map(post => (
-        <div key={post.uid}>
-          <h1>{post.data.title}</h1>
-          <h3>{post.data.subtitle}</h3>
-          <p>{post.data.author}</p>
-        </div>
-      ))}
+
+      <ul className={styles.post}>
+        {posts.map(post => (
+          <li key={post.uid}>
+            <h1>{post.data.title}</h1>
+            <h4>{post.data.subtitle}</h4>
+
+            <section className={styles.info}>
+              <time>
+                <CalendarIcon />
+                {format(new Date(post.first_publication_date), 'dd MMM yyyy', {
+                  locale: ptBR,
+                })}
+              </time>
+              <span>
+                <UserIcon /> {post.data.author}
+              </span>
+            </section>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
@@ -57,7 +74,7 @@ export const getStaticProps: GetStaticProps = async () => {
   );
 
   const results = postsResponse.results.map((post: Post) => ({
-    slug: post.uid,
+    uid: post.uid,
     first_publication_date: post.first_publication_date,
     data: {
       title: post.data.title,
