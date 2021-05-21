@@ -7,6 +7,8 @@ import { getPrismicClient } from '../services/prismic';
 import commonStyles from '../styles/common.module.scss';
 import styles from './home.module.scss';
 
+import Logo from '../components/Header';
+
 interface Post {
   uid?: string;
   first_publication_date: string | null;
@@ -30,11 +32,16 @@ export default function Home({ postsPagination }: HomeProps): JSX.Element {
   const [posts, setPosts] = useState(postsPagination.results);
 
   return (
-    <p>
+    <div className={commonStyles.container}>
+      <Logo />
       {posts.map(post => (
-        <h1>{post.data.title}</h1>
+        <div key={post.uid}>
+          <h1>{post.data.title}</h1>
+          <h3>{post.data.subtitle}</h3>
+          <p>{post.data.author}</p>
+        </div>
       ))}
-    </p>
+    </div>
   );
 }
 
