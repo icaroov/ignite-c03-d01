@@ -43,28 +43,6 @@ interface PostProps {
 export default function Post({ post }: PostProps): JSX.Element {
   const router = useRouter();
 
-  /*   function getTime(): string {
-    const wordsPerMinute = 200;
-
-    const words = post?.data?.content?.reduce((contentWords, content) => {
-      contentWords.push(...content.heading.split(' '));
-
-      const sanitizedContent = RichText.asText(content.body)
-        .replace(/[^\w|\s]/g, '')
-        .split(' ');
-
-      contentWords.push(...sanitizedContent);
-
-      return contentWords;
-    }, []);
-
-    const minutes = words.length / wordsPerMinute;
-    const readTime = Math.ceil(minutes);
-    return `${readTime} minute read`;
-  }
-
-  console.log(getTime()); */
-
   const readingTime = useMemo(() => {
     const wordsPerMinute = 200;
 
