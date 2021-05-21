@@ -5,6 +5,7 @@ import { FiCalendar as CalendarIcon, FiUser as UserIcon } from 'react-icons/fi';
 import { format } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 
+import Link from 'next/link';
 import { getPrismicClient } from '../services/prismic';
 
 import commonStyles from '../styles/common.module.scss';
@@ -41,7 +42,11 @@ export default function Home({ postsPagination }: HomeProps): JSX.Element {
       <ul className={styles.post}>
         {posts.map(post => (
           <li key={post.uid}>
-            <h1>{post.data.title}</h1>
+            <Link href={`/post/${post.uid}`}>
+              <a className={styles.link}>
+                <h1>{post.data.title}</h1>
+              </a>
+            </Link>
             <h4>{post.data.subtitle}</h4>
 
             <section className={styles.info}>
@@ -58,6 +63,10 @@ export default function Home({ postsPagination }: HomeProps): JSX.Element {
           </li>
         ))}
       </ul>
+
+      <button type="button" className={styles.btn}>
+        Carregar mais posts...
+      </button>
     </div>
   );
 }
